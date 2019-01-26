@@ -38,7 +38,7 @@ namespace ConsoleApplication12
         // Runtime O(n) + O(logn)
         static void Main(string[] args)
         {
-            // Test data setup, even number list
+            // data setup number list
             var playerStrengths = new[] { 1, 2, 5, 4, 9, 7, 8, 7, 5, 4, 1, 0, 1, 4, 2, 3 };
             var players = playerStrengths.Select(i => new Player { Strength = i }).ToList();
             Console.WriteLine("Participants:\n");
