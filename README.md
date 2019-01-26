@@ -22,7 +22,7 @@ namespace ConsoleApplication12
         {
             Opponents = new List<int>();
         }
-        // Return winner of the match and remember opponent
+        // Return winner of the match and remembers opponent
         // O(1)
         static Player Play(Player p1, Player p2)
         {
