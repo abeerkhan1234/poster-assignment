@@ -6,76 +6,76 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication12
 {
-    public class Program
+    public class Player
     {
-
-        static Random _rnd = new Random();
-
-        static int[] Generate(int n)
+        public int Strength
         {
-
-            int[] a = new int[n];
-
-            for (int i = 0; i < n; i++)
-                a[i] = _rnd.Next(100);
-
-            return a;
-
+            get;
+            set;
         }
-
-        static void TwoSmallestValues(int[] a, out int min1, out int min2)
+        public List<int> Opponents
         {
-
-            min1 = a[0];
-            min2 = a[1];
-            if (min2 < min1)
+            get;
+            private set;
+        }
+        public Player()
+        {
+            Opponents = new List<int>();
+        }
+        // Return winner of the match and remember opponent
+        // O(1)
+        static Player Play(Player p1, Player p2)
+        {
+            if (p1.Strength > p2.Strength)
             {
-                min1 = a[1];
-                min2 = a[0];
+                p1.Opponents.Add(p2.Strength);
+                return p1;
             }
-
-            for (int i = 2; i < a.Length; i++)
-                if (a[i] < min1)
-                {
-                    min2 = min1;
-                    min1 = a[i];
-                }
-                else if (a[i] < min2)
-                {
-                    min2 = a[i];
-                }
-
+            p2.Opponents.Add(p1.Strength);
+            return p2;
         }
 
+        // Runtime O(n) + O(logn)
         static void Main(string[] args)
         {
-
-            while (true)
+            // Test data setup, even number list
+            var playerStrengths = new[] { 1, 2, 5, 4, 9, 7, 8, 7, 5, 4, 1, 0, 1, 4, 2, 3 };
+            var players = playerStrengths.Select(i => new Player { Strength = i }).ToList();
+            Console.WriteLine("Participants:\n");
+            for (int j=0; j<16; j++)
             {
-
-                Console.Write("n=");
-                int n = int.Parse(Console.ReadLine());
-
-                if (n < 2)
-                    break;
-
-                int[] a = Generate(n);
-
-                int min1, min2;
-
-                TwoSmallestValues(a, out min1, out min2);
-
-                Console.Write("{0,4} and {1,4} are smallest in:", min1, min2);
-                for (int i = 0; i < a.Length; i++)
-                    Console.Write("{0,4}", a[i]);
-                Console.WriteLine();
-                Console.WriteLine();
-
+                
+                Console.WriteLine("Player {0} = {1} ",j,playerStrengths[j]);
             }
 
-            Console.Write("Press ENTER to continue... ");
-            Console.ReadLine();
+            // O(n)
+            while (players.Count > 1)
+            {
+                    var nextRound = new List<Player>();
+                    for (int i = 0; i < players.Count - 1; i += 2)
+                    {
+                        Player winner = Play(players[i], players[i + 1]);
+                        nextRound.Add(winner); // add winner of the match
+                    }
+                    players = nextRound;
 
+            }
+          
+
+            // O(1)
+            var tournamentWinner = players.First();
+            int first = tournamentWinner.Strength;
+            int second = -1;
+
+            // O(logn)            
+            foreach (int i in tournamentWinner.Opponents)
+                if (i > second)// update                
+                    second = i;
+            
+            Console.WriteLine("\nFirst Place: {0}, Second Place: {1}", first, second);
+            Console.WriteLine("press key...");
+            Console.ReadKey();
         }
+
     }
 }
