@@ -22,7 +22,7 @@ namespace ConsoleApplication12
         {
             Opponents = new List<int>();
         }
-        // Return winner of the match and remembers opponent
+        // Return winner of the match and remember opponent
         // O(1)
         static Player Play(Player p1, Player p2)
         {
@@ -34,33 +34,35 @@ namespace ConsoleApplication12
             p2.Opponents.Add(p1.Strength);
             return p2;
         }
+       
 
         // Runtime O(n) + O(logn)
         static void Main(string[] args)
         {
-            // data setup number list
+            // Test data setup, even number list
             var playerStrengths = new[] { 1, 2, 5, 4, 9, 7, 8, 7, 5, 4, 1, 0, 1, 4, 2, 3 };
             var players = playerStrengths.Select(i => new Player { Strength = i }).ToList();
             Console.WriteLine("Participants:\n");
-            for (int j=0; j<16; j++)
+            
+            for (int j = 0; j < 16; j++)
             {
-                
-                Console.WriteLine("Player {0} = {1} ",j,playerStrengths[j]);
-            }
 
+                Console.WriteLine("Player {0} = {1} ", j, playerStrengths[j]);
+            }
+            
             // O(n)
             while (players.Count > 1)
             {
-                    var nextRound = new List<Player>();
-                    for (int i = 0; i < players.Count - 1; i += 2)
-                    {
-                        Player winner = Play(players[i], players[i + 1]);
-                        nextRound.Add(winner); // add winner of the match
-                    }
-                    players = nextRound;
+                var nextRound = new List<Player>();
+                for (int i = 0; i < players.Count - 1; i += 2)
+                {
+                    Player winner = Play(players[i], players[i + 1]);
+                    nextRound.Add(winner); // add winner of the match
+                }
+                players = nextRound;
 
             }
-          
+
 
             // O(1)
             var tournamentWinner = players.First();
@@ -72,6 +74,13 @@ namespace ConsoleApplication12
                 if (i > second)// update                
                     second = i;
             
+            //Sorted Form
+            Console.WriteLine("\nOrder of Elimination : ");
+            Array.Sort(playerStrengths);
+            foreach (var p in playerStrengths)
+            {
+                Console.WriteLine(p.ToString());
+            }
             Console.WriteLine("\nFirst Place: {0}, Second Place: {1}", first, second);
             Console.WriteLine("press key...");
             Console.ReadKey();
